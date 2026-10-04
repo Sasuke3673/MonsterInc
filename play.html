@@ -8,22 +8,12 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<!-- Chặn truy cập khi chưa đăng nhập: ẩn trang cho đến khi xác nhận có phiên, nếu không thì về trang chủ -->
+<!-- Chặn truy cập khi chưa đăng nhập và tải tiến trình theo tài khoản trước khi game chạy (xem cloud-save.js) -->
 <style id="auth-gate">html{visibility:hidden}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/supabase-config.js"></script>
 <script src="/auth.js"></script>
-<script>
-(function(){
-  var sb = window.xqvAuth && window.xqvAuth.client;
-  if (!sb) { location.replace("/"); return; }
-  sb.auth.getSession().then(function(r){
-    if (!r.data || !r.data.session) { location.replace("/?next=play"); return; }
-    document.getElementById("auth-gate").remove();
-  }, function(){ location.replace("/"); });
-  sb.auth.onAuthStateChange(function(event){ if (event === "SIGNED_OUT") location.replace("/"); });
-})();
-</script>
+<script src="/cloud-save.js"></script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Quái Vật">
 <style>
@@ -508,10 +498,11 @@ footer{margin-top:20px;font-size:13px;color:var(--muted);max-width:75ch}
       <div id="p-closet" role="tabpanel" aria-labelledby="t-closet" hidden></div>
     </div>
   </div>
-  <footer>Đây là bản mô phỏng: tiền, kho đồ, chỉ số và thời gian chỉ lưu trong trình duyệt của bạn. Đóng trang rồi mở lại, game sẽ tính bù khoảng thời gian bạn vắng mặt. Trong game thật, việc tính bù này do server làm dựa trên mốc thời gian, để người chơi không gian lận bằng cách chỉnh đồng hồ điện thoại.</footer>
+  <footer>Đây là bản mô phỏng: tiền, kho đồ, chỉ số và thời gian được lưu theo tài khoản của bạn. Đóng trang rồi mở lại, game sẽ tính bù khoảng thời gian bạn vắng mặt. Trong game thật, việc tính bù này do server làm dựa trên mốc thời gian, để người chơi không gian lận bằng cách chỉnh đồng hồ điện thoại.</footer>
 </div>
 
-<script>
+<!-- Mã game; cloud-save.js chạy đoạn này sau khi đã tải tiến trình của tài khoản -->
+<script type="text/plain" id="game-src">
 (function(){
 const INK='#2a2433';
 const ell=(cx,cy,rx,ry)=>`M${cx-rx},${cy} a${rx},${ry} 0 1,0 ${2*rx},0 a${rx},${ry} 0 1,0 ${-2*rx},0Z`;
