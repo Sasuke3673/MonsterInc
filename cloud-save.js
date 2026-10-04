@@ -79,6 +79,29 @@
     } catch (e) {}
   }
 
+  // Menu tài khoản trên thanh trên cùng: tên, email, Đăng xuất (lưu nốt tiến trình rồi mới đăng xuất)
+  function setupAccount(user) {
+    domReady(function () {
+      var name = (user.user_metadata && user.user_metadata.display_name) || user.email.split("@")[0];
+      var el = function (id) { return document.getElementById(id); };
+      if (!el("logout")) return;
+      el("accName").textContent = name;
+      el("accEmail").textContent = user.email;
+      document.querySelector(".account .avatar").textContent = name.trim().charAt(0).toUpperCase() || "?";
+      document.addEventListener("click", function (e) {
+        var acc = el("account");
+        if (acc.open && !acc.contains(e.target)) acc.open = false;
+      });
+      el("logout").addEventListener("click", async function () {
+        var b = this; b.disabled = true; b.textContent = "Đang lưu…";
+        try { if (window.xqvGame) window.xqvGame.save(); await push(); } catch (e) {}
+        syncOn = false;
+        await sb.auth.signOut({ scope: "local" });
+        location.replace("/");
+      });
+    });
+  }
+
   sb.auth.onAuthStateChange(function (event, session) {
     if (event === "SIGNED_OUT") { syncOn = false; location.replace("/"); return; }
     if (session) token = session.access_token;
@@ -90,6 +113,7 @@
     var session = r.data && r.data.session;
     if (!session) { location.replace("/?next=play"); return; }
     userId = session.user.id; token = session.access_token;
+    setupAccount(session.user);
 
     var meta = readMeta();
     var localRaw = lsGet(KEY) || lsGet(LEGACY);

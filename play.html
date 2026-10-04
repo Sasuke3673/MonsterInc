@@ -415,28 +415,119 @@ footer{margin-top:20px;font-size:13px;color:var(--muted);max-width:75ch}
 @keyframes think{50%{transform:translateY(-4px)}}
 @keyframes spark{50%{transform:scale(1.4);opacity:.4}}
 @media (prefers-reduced-motion:reduce){.live *{animation:none!important}.live .stink,.live .zzz,.live .heart,.live .pop,.live .fall{opacity:.85}.btn:hover,.abtn:hover{transform:none}}
+
+/* ===== Bố cục theo tab: thanh trên cùng + thanh tab + mỗi tab một màn hình ===== */
+body{margin:0}
+.appbar{display:block;margin:0;position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.appbar-in{max-width:1160px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--fg);font:800 19px/1 var(--display);margin-right:auto;min-width:0}
+.brand img{width:32px;height:32px;border-radius:9px;flex:none}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar .wallet{flex-wrap:nowrap;gap:6px}
+.appbar .cur{padding:4px 10px 4px 7px;font-size:14px}
+.plus{border:0;background:var(--gem);color:#0b3b47;font:800 14px/1 var(--body);width:20px;height:20px;border-radius:50%;margin-left:4px;cursor:pointer;display:grid;place-items:center;padding:0}
+.account{position:relative}
+.account summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:3px 12px 3px 3px;background:var(--chip);font-weight:600;font-size:14px;max-width:200px}
+.account summary::-webkit-details-marker{display:none}
+.account summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:800 15px/1 var(--display);flex:none}
+.acc-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acc-menu{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:12px;min-width:220px;display:flex;flex-direction:column;gap:10px;z-index:40}
+.acc-email{font-size:13px;color:var(--muted);word-break:break-all}
+.acc-menu .btn{width:100%}
+
+.tabs{position:sticky;top:49px;z-index:25;background:var(--bg);border-bottom:1px solid var(--line);margin:0;padding:0 max(14px,calc((100% - 1160px)/2 + 14px));display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tab{display:inline-flex;align-items:center;gap:7px;cursor:pointer}
+.tab svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tab:focus-visible{outline-offset:-3px}
+
+.wrap{padding-block:16px 40px}
+.grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.stage-col{position:sticky;top:110px}
+.panel{padding:4px 18px 12px}
+/* Nhiệm vụ và Chiến đấu cần nhiều chỗ: ẩn sân khấu, mở rộng bảng */
+body[data-tab="quest"] .grid,body[data-tab="battle"] .grid{grid-template-columns:minmax(0,1fr);max-width:860px;margin-inline:auto}
+body[data-tab="quest"] .stage-col,body[data-tab="battle"] .stage-col{display:none}
+#p-home .sec h2{margin-bottom:12px}
+#p-home .acts{margin-top:12px}
+
+/* tab Quái vật */
+.namebox .row{display:flex;gap:8px;flex-wrap:wrap}
+.namebox input{flex:1 1 180px;min-width:0;font:700 17px/1.2 var(--display);padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--chip);color:var(--fg)}
+.namebox input:focus{outline:none;border-color:var(--accent)}
+.draftbar{position:sticky;top:110px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:10px 12px;margin:12px 0;font-size:14px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.draftbar .sp{flex:1}
+.draftbar .btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.code-box.sec{margin:16px 0;border-bottom:1px solid var(--line)}
+.danger .btn{border-color:var(--err);color:var(--err)}
+.finish{display:block;width:100%;margin:8px 0 16px;font-family:var(--display);font-size:19px;padding:14px}
+.sec h2.big{font-size:26px}
+.onboard-intro p{margin:0;color:var(--muted)}
+#p-design footer{margin-top:8px}
+/* Lần đầu: chỉ có màn hình tạo quái vật, ẩn các tab khác */
+body.onboarding .tabs,body.onboarding .clock{display:none}
+body.onboarding .stage-col{top:66px}
+body.onboarding .draftbar{top:66px}
+
+@media (max-width:860px){
+  .appbar-in{padding:6px 12px;gap:8px}
+  .brand span{display:none}
+  .acc-name{display:none}
+  .account summary{padding:3px}
+  /* thanh tab chuyển xuống đáy màn hình */
+  .tabs{position:fixed;top:auto;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--line);border-bottom:0;padding:0 0 env(safe-area-inset-bottom,0px);justify-content:space-around;overflow:visible}
+  .tab{flex:1 1 0;flex-direction:column;gap:2px;padding:7px 2px 6px;font-size:11px;border-bottom:0;border-top:3px solid transparent;min-width:0;position:relative}
+  .tab[aria-selected="true"]{border-top-color:var(--accent);border-bottom-color:transparent}
+  .tab svg{width:22px;height:22px}
+  .tab span:not(.cnt){white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .tab .cnt{position:absolute;top:3px;left:calc(50% + 6px);margin:0;padding:0 5px;font-size:10px;background:var(--accent);color:var(--accent-ink)}
+  .wrap{padding:10px 12px calc(84px + env(safe-area-inset-bottom,0px))}
+  .grid,body[data-tab] .grid{grid-template-columns:minmax(0,1fr);gap:12px}
+  .stage-col{position:static}
+  .stage{max-width:min(100%,380px);margin-inline:auto;width:100%}
+  body:not([data-tab="home"]) .stage{max-width:240px}
+  body:not([data-tab="home"]) .clock,body:not([data-tab="home"]) .lvbadge{display:none}
+  .panel{border-radius:18px;padding:2px 14px 10px}
+  .draftbar{top:52px}
+  body.onboarding .draftbar{top:52px}
+  body.onboarding .wrap{padding-bottom:24px}
+}
 </style>
 
 </head>
-<body>
-<div class="wrap">
-  <header>
-    <h1>Xưởng Quái Vật <span>Chibi</span></h1>
-    <div class="tag">Bản demo · Ngoại hình thuần trang trí, không ảnh hưởng chỉ số</div>
-  </header>
+<body data-tab="home">
+<header class="appbar">
+  <div class="appbar-in">
+    <a class="brand" href="/" title="Trang chủ"><img src="/icon-192.png" alt="" width="32" height="32"><span>Xưởng Quái Vật</span></a>
+    <div class="wallet">
+      <span class="cur" title="Xu: kiếm được khi chơi"><i class="ico coin"></i><span id="coins">0</span></span>
+      <span class="cur" title="Kim cương: nạp tiền hoặc thưởng hiếm"><i class="ico gem"></i><span id="gems">0</span><button class="plus" id="topup" type="button" aria-label="Nạp thử 100 kim cương" title="Nạp thử 100 kim cương (demo)">+</button></span>
+    </div>
+    <details class="account" id="account">
+      <summary aria-label="Tài khoản"><span class="avatar" aria-hidden="true">?</span><span class="acc-name" id="accName">Tài khoản</span></summary>
+      <div class="acc-menu">
+        <div class="acc-email" id="accEmail"></div>
+        <button class="btn" id="logout" type="button">Đăng xuất</button>
+      </div>
+    </details>
+  </div>
+</header>
 
+<nav class="tabs" role="tablist" aria-label="Khu vực trong game">
+  <button class="tab" role="tab" id="t-home" aria-selected="true" aria-controls="p-home" data-tab="home" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/></svg><span>Nhà</span></button>
+  <button class="tab" role="tab" id="t-quest" aria-selected="false" aria-controls="p-quest" data-tab="quest" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/></svg><span>Nhiệm vụ</span><span class="cnt" id="qCnt">0</span></button>
+  <button class="tab" role="tab" id="t-battle" aria-selected="false" aria-controls="p-battle" data-tab="battle" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/></svg><span>Chiến đấu</span></button>
+  <button class="tab" role="tab" id="t-shop" aria-selected="false" aria-controls="p-shop" data-tab="shop" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>Cửa hàng</span></button>
+  <button class="tab" role="tab" id="t-closet" aria-selected="false" aria-controls="p-closet" data-tab="closet" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6a2 2 0 1 1 2-2"/><path d="M12 6v2L3 15h18l-9-7"/></svg><span>Tủ đồ</span><span class="cnt" id="ownCnt">0</span></button>
+  <button class="tab" role="tab" id="t-design" aria-selected="false" aria-controls="p-design" data-tab="design" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7"/><circle cx="9.5" cy="12" r="1"/><circle cx="14.5" cy="12" r="1"/><path d="M7 7 5 3M17 7l2-4"/></svg><span>Quái vật</span></button>
+</nav>
+
+<div class="wrap">
   <div class="grid">
     <div class="stage-col">
-      <div class="wallet">
-        <span class="cur" title="Xu: kiếm được khi chơi"><i class="ico coin"></i><span id="coins">0</span></span>
-        <span class="cur" title="Kim cương: nạp tiền hoặc thưởng hiếm"><i class="ico gem"></i><span id="gems">0</span></span>
-        <span class="sp"></span>
-        <button class="mini-btn" id="battle" type="button">Chiến đấu</button>
-        <button class="mini-btn" id="topup" type="button">Nạp thử 100 kim cương</button>
-      </div>
       <div class="clock">
         <span>Giờ trong game <b id="clock">08:00</b></span><span id="day">Ngày 1</span>
-        <label for="speed">Tốc độ thời gian</label>
+        <label for="speed">Tốc độ</label>
         <select id="speed">
           <option value="1">Như thật</option>
           <option value="60">1 phút = 1 giờ</option>
@@ -450,55 +541,91 @@ footer{margin-top:20px;font-size:13px;color:var(--muted);max-width:75ch}
         <div class="layer room live" id="room"></div>
         <div class="night" id="night" hidden></div>
         <div class="layer" id="monster" title="Chạm để vuốt ve"></div>
-        <div class="nameplate"><input id="name" aria-label="Tên quái vật" maxlength="18" value="Bánh Bao"></div>
+        <div class="nameplate"><input id="name" aria-label="Tên quái vật" maxlength="18" value="Bánh Bao" readonly tabindex="-1"></div>
         <div class="roomlabel" id="roomlabel"></div>
         <div class="lvbadge" id="lvbadge">Cấp 1</div>
         <div id="lvfx"></div>
         <div class="trying" id="trying" hidden><div><span id="tryingText"></span><button type="button" id="stopTry">Bỏ thử</button></div></div>
       </div>
-
-      <div class="lvl" id="lvl">
-        <div class="lvnum"><div style="text-align:center"><small>Cấp</small><b id="lvN">1</b></div></div>
-        <div class="lvtop"><b id="lvTitle">Kinh nghiệm</b><span id="lvXP"></span></div>
-        <div class="xpbar" role="progressbar" aria-label="Kinh nghiệm" aria-valuemin="0" id="xpbar"><i id="xpfill" style="width:0"></i></div>
-        <div class="lvnext"><span id="lvNeed"></span><span id="lvGoal"></span></div>
-        <details class="lvtable"><summary>Bảng điểm lên cấp và phần thưởng</summary><div class="tbl" id="lvTbl"></div></details>
-      </div>
-      <div class="rooms" id="rooms" role="group" aria-label="Chuyển phòng"></div>
-      <div class="acts" id="acts"></div>
-      <div class="needs" id="needs"></div>
-
-      <div class="actions">
-        <button class="btn primary" id="rand" type="button">Ngẫu nhiên ngoại hình</button>
-        <button class="btn" id="randName" type="button">Đặt tên khác</button>
-        <button class="btn" id="reset" type="button">Chơi lại từ đầu</button>
-      </div>
-      <div class="code-box">
-        <label for="dna">Mã gen quái vật</label>
-        <div class="row"><input id="dna" readonly><button class="btn" id="copy" type="button">Sao chép</button></div>
-        <label for="paste">Nạp mã của người khác</label>
-        <div class="row"><input id="paste" placeholder="VD: B2E4M0H3T4W1P1-8EC5FF-FFFFFF-FF5D73-A700"><button class="btn" id="load" type="button">Nạp</button></div>
-        <div class="msg" id="msg" role="status"></div>
-        <div class="facts">Có <b id="combo"></b> tổ hợp hình dáng, mỗi vùng màu chọn được trong <b>16,7 triệu</b> màu. Phần <b>-A</b> của mã là phụ kiện: khi nạp mã, phụ kiện bạn chưa sở hữu sẽ bị bỏ qua, giống cách server kiểm tra kho đồ.</div>
-      </div>
     </div>
 
     <div class="panel">
-      <div class="tabs" role="tablist">
-        <button class="tab" role="tab" id="t-quest" aria-selected="true" aria-controls="p-quest" type="button">Nhiệm vụ<span class="cnt" id="qCnt">0</span></button>
-        <button class="tab" role="tab" id="t-battle" aria-selected="false" aria-controls="p-battle" type="button">Chiến đấu</button>
-        <button class="tab" role="tab" id="t-design" aria-selected="false" aria-controls="p-design" type="button">Thiết kế</button>
-        <button class="tab" role="tab" id="t-shop" aria-selected="false" aria-controls="p-shop" type="button">Cửa hàng</button>
-        <button class="tab" role="tab" id="t-closet" aria-selected="false" aria-controls="p-closet" type="button">Tủ đồ<span class="cnt" id="ownCnt">0</span></button>
+      <!-- Nhà: chuyển phòng, chăm sóc, nhu cầu, cấp độ -->
+      <div id="p-home" role="tabpanel" aria-labelledby="t-home">
+        <section class="sec">
+          <h2>Chăm sóc</h2>
+          <div class="rooms" id="rooms" role="group" aria-label="Chuyển phòng"></div>
+          <div class="acts" id="acts"></div>
+        </section>
+        <section class="sec">
+          <h2>Nhu cầu</h2>
+          <div class="needs" id="needs"></div>
+        </section>
+        <section class="sec">
+          <div class="lvl" id="lvl">
+            <div class="lvnum"><div style="text-align:center"><small>Cấp</small><b id="lvN">1</b></div></div>
+            <div class="lvtop"><b id="lvTitle">Kinh nghiệm</b><span id="lvXP"></span></div>
+            <div class="xpbar" role="progressbar" aria-label="Kinh nghiệm" aria-valuemin="0" id="xpbar"><i id="xpfill" style="width:0"></i></div>
+            <div class="lvnext"><span id="lvNeed"></span><span id="lvGoal"></span></div>
+            <details class="lvtable"><summary>Bảng điểm lên cấp và phần thưởng</summary><div class="tbl" id="lvTbl"></div></details>
+          </div>
+        </section>
       </div>
-      <div id="p-quest" role="tabpanel" aria-labelledby="t-quest"></div>
+      <div id="p-quest" role="tabpanel" aria-labelledby="t-quest" hidden></div>
       <div id="p-battle" role="tabpanel" aria-labelledby="t-battle" hidden></div>
-      <div id="p-design" role="tabpanel" aria-labelledby="t-design" hidden></div>
       <div id="p-shop" role="tabpanel" aria-labelledby="t-shop" hidden></div>
       <div id="p-closet" role="tabpanel" aria-labelledby="t-closet" hidden></div>
+
+      <!-- Quái vật: lần đầu là màn hình tạo quái vật; sau đó đổi ngoại hình/tên tốn xu -->
+      <div id="p-design" role="tabpanel" aria-labelledby="t-design" hidden>
+        <section class="sec onboard-intro" id="onboardIntro" hidden>
+          <h2 class="big">Tạo bé quái vật của bạn</h2>
+          <p>Chọn hình dáng, màu sắc và đặt tên cho bé. Lần tạo đầu tiên <b>miễn phí</b>; về sau muốn đổi ngoại hình hoặc đổi tên sẽ tốn xu, nên hãy chọn thật ưng ý nhé!</p>
+        </section>
+
+        <section class="sec namebox">
+          <h2 id="nameTitle">Tên quái vật</h2>
+          <div class="row">
+            <input id="newName" maxlength="18" autocomplete="off" aria-labelledby="nameTitle">
+            <button class="btn" id="randName" type="button">Gợi ý tên</button>
+            <button class="btn primary" id="renameBtn" type="button">Đổi tên</button>
+          </div>
+          <div class="hint" id="nameHint"></div>
+        </section>
+
+        <div class="draftbar" id="draftBar" hidden>
+          <span id="draftText">Bạn đang xem thử ngoại hình mới.</span>
+          <span class="sp"></span>
+          <button class="btn" id="draftCancel" type="button">Hủy</button>
+          <button class="btn primary" id="draftSave" type="button">Lưu</button>
+        </div>
+
+        <section class="sec">
+          <div class="shelf-head"><h2>Ngoại hình</h2><button class="btn" id="rand" type="button">Ngẫu nhiên</button></div>
+          <p class="hint" id="designHint"></p>
+        </section>
+        <div id="designBody"></div>
+
+        <button class="btn primary finish" id="finishOnboard" type="button" hidden>Hoàn tất và vào nhà</button>
+
+        <section class="sec code-box" id="codeBox">
+          <label for="dna">Mã gen quái vật</label>
+          <div class="row"><input id="dna" readonly><button class="btn" id="copy" type="button">Sao chép</button></div>
+          <label for="paste">Nạp mã của người khác</label>
+          <div class="row"><input id="paste" placeholder="VD: B2E4M0H3T4W1P1-8EC5FF-FFFFFF-FF5D73-A700"><button class="btn" id="load" type="button">Xem thử</button></div>
+          <div class="msg" id="msg" role="status"></div>
+          <div class="facts">Có <b id="combo"></b> tổ hợp hình dáng, mỗi vùng màu chọn được trong <b>16,7 triệu</b> màu. Phần <b>-A</b> của mã là phụ kiện: khi nạp mã, phụ kiện bạn chưa sở hữu sẽ bị bỏ qua.</div>
+        </section>
+
+        <section class="sec danger" id="resetBox">
+          <h2>Chơi lại từ đầu</h2>
+          <p class="hint">Xóa toàn bộ tiến trình (xu, đồ, cấp độ) và tạo lại bé quái vật mới.</p>
+          <button class="btn" id="reset" type="button">Chơi lại từ đầu</button>
+        </section>
+        <footer>Đây là bản mô phỏng: tiền, kho đồ, chỉ số và thời gian được lưu theo tài khoản của bạn. Đóng trang rồi mở lại, game sẽ tính bù khoảng thời gian bạn vắng mặt.</footer>
+      </div>
     </div>
   </div>
-  <footer>Đây là bản mô phỏng: tiền, kho đồ, chỉ số và thời gian được lưu theo tài khoản của bạn. Đóng trang rồi mở lại, game sẽ tính bù khoảng thời gian bạn vắng mặt. Trong game thật, việc tính bù này do server làm dựa trên mốc thời gian, để người chơi không gian lận bằng cách chỉnh đồng hồ điện thoại.</footer>
 </div>
 
 <!-- Mã game; cloud-save.js chạy đoạn này sau khi đã tải tiến trình của tài khoản -->
@@ -605,15 +732,22 @@ const foodIcon=(f,x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})">${f.s
 /* ===== trạng thái ===== */
 const START={b:0,e:0,m:0,h:1,t:1,w:0,p:3,col:['FFCF6E','FFF4D6','FF7A1A']};
 function fresh(){return {S:JSON.parse(JSON.stringify(START)),name:'Bánh Bao',coins:600,gems:30,owned:[],eq:{hat:0,gl:0,bg:0},wins:0,battles:0,
-  needs:{food:70,energy:80,clean:60,wc:55},sleeping:false,poops:[],room:'living',gameMin:8*60,speed:60,lastReal:Date.now(),level:1,xp:0,totalXp:0,petAt:0}}
+  needs:{food:70,energy:80,clean:60,wc:55},sleeping:false,poops:[],room:'living',gameMin:8*60,speed:60,lastReal:Date.now(),level:1,xp:0,totalXp:0,petAt:0,
+  born:false}}
 const KEY='xuong-quai-vat-demo-v3';
 let G=fresh();
 try{
   const raw=localStorage.getItem(KEY)||localStorage.getItem('xuong-quai-vat-demo-v2');
-  if(raw){const g=JSON.parse(raw);if(g&&g.S&&g.eq){G=Object.assign(fresh(),g);G.needs=Object.assign(fresh().needs,g.needs||{})}}
+  // Bản lưu cũ (trước khi có màn hình tạo quái vật) coi như đã tạo xong
+  if(raw){const g=JSON.parse(raw);if(g&&g.S&&g.eq){G=Object.assign(fresh(),g);G.needs=Object.assign(fresh().needs,g.needs||{});if(g.born===undefined)G.born=true}}
 }catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}};
+window.xqvGame={save:()=>save()};
 let tryOn=null, pending=null, uidN=0, act=null;
+/* Đổi ngoại hình/tên sau lần tạo đầu tiên tốn xu. Thay đổi ngoại hình được xem thử trong bản nháp (draft) trước khi trả xu. */
+const REDESIGN_COST=1000, RENAME_COST=300;
+let draft=null, curTab='home';
+const viewS=()=>draft&&curTab==='design'?draft.S:G.S;
 
 /* ===== vẽ quái vật ===== */
 function starPath(x,y,r){let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rad=i%2?r*.45:r;p+=(i?'L':'M')+(x+rad*Math.cos(a)).toFixed(1)+','+(y+rad*Math.sin(a)).toFixed(1)}return p+'Z'}
@@ -1748,10 +1882,10 @@ function buildDesign(){
     C.list.forEach(hx=>{h+=`<button type="button" class="sw" data-c="${ci}" data-hex="${hx}" style="background:#${hx}" aria-label="Màu #${hx}" aria-pressed="false"></button>`});
     h+=`<input type="color" id="pick${ci}" data-c="${ci}" aria-label="Chọn màu tùy ý cho ${C.label.toLowerCase()}"></div><div class="hint">${C.hint}</div></section>`;
   });
-  $('p-design').innerHTML=h;
+  $('designBody').innerHTML=h;
 }
 function refreshDesign(){
-  const S=G.S, acc=shownAcc();
+  const S=viewS(), acc=shownAcc();
   $('p-design').querySelectorAll('.chip').forEach(b=>{
     const k=b.dataset.k,i=+b.dataset.i;
     b.setAttribute('aria-pressed',S[k]===i);
@@ -1808,8 +1942,8 @@ function renderCloset(){
 let lastFx='', lastRoom='', lastActs='';
 function renderStage(force){
   const fx=computeFx(), acc=shownAcc();
-  const key=JSON.stringify([fx.bob,fx.eyes,fx.mouth,fx.bubble,fx.dirty,fx.zzz,fx.tear,fx.sweat,fx.drool,act&&act.type,acc,G.S]);
-  if(force||key!==lastFx){$('monster').innerHTML=render(G.S,acc,fx);lastFx=key}
+  const key=JSON.stringify([fx.bob,fx.eyes,fx.mouth,fx.bubble,fx.dirty,fx.zzz,fx.tear,fx.sweat,fx.drool,act&&act.type,acc,viewS()]);
+  if(force||key!==lastFx){$('monster').innerHTML=render(viewS(),acc,fx);lastFx=key}
   const rk=JSON.stringify([G.room,G.poops.filter(p=>p.room===G.room).length,G.sleeping,G.room==='kitchen'?Math.floor(G.gameMin/5):0]);
   if(force||rk!==lastRoom){$('room').innerHTML=roomSVG(G.room);lastRoom=rk}
   const wv=$('winview');wv.hidden=G.room!=='living';wv.style.background=BGS[acc.bg]||SKY;
@@ -1881,8 +2015,32 @@ function refreshLive(force){
 function update(){
   refreshLive(true);
   $('dna').value=toDNA();
-  refreshDesign();renderShop();renderCloset();renderQuests();renderBattle();
+  refreshDesign();refreshPet();renderShop();renderCloset();renderQuests();renderBattle();
   save();
+}
+/* tab Quái vật: chế độ tạo lần đầu (miễn phí) hoặc đổi có trả xu */
+function refreshPet(){
+  const born=G.born;
+  document.body.classList.toggle('onboarding',!born);
+  $('onboardIntro').hidden=born;$('finishOnboard').hidden=born;$('renameBtn').hidden=!born;$('resetBox').hidden=!born;
+  $('nameTitle').textContent=born?'Đổi tên':'Đặt tên cho bé';
+  $('nameHint').textContent=born?`Đổi tên tốn ${fmt(RENAME_COST)} xu. Bạn đang có ${fmt(G.coins)} xu.`:'Tối đa 18 ký tự. Bấm "Gợi ý tên" nếu chưa nghĩ ra.';
+  $('designHint').textContent=born
+    ?`Chọn kiểu dáng và màu bên dưới để xem thử trên bé. Chỉ khi bấm Lưu mới trừ ${fmt(REDESIGN_COST)} xu.`
+    :'Bấm vào từng lựa chọn để xem ngay trên bé.';
+  $('load').textContent=born?'Xem thử':'Dùng mã này';
+  $('draftBar').hidden=!(born&&draft);
+  if(born&&draft){
+    const ok=G.coins>=REDESIGN_COST;
+    $('draftText').textContent=ok?`Ngoại hình mới đang được xem thử. Lưu để áp dụng (${fmt(REDESIGN_COST)} xu).`:`Cần ${fmt(REDESIGN_COST)} xu để lưu ngoại hình mới, bạn còn thiếu ${fmt(REDESIGN_COST-G.coins)} xu.`;
+    $('draftSave').textContent=`Lưu · ${fmt(REDESIGN_COST)} xu`;$('draftSave').disabled=!ok;
+  }
+}
+function selectTab(name){
+  if(!G.born)name='design';
+  curTab=name;document.body.dataset.tab=name;
+  document.querySelectorAll('.tabs .tab').forEach(x=>{const on=x.dataset.tab===name;x.setAttribute('aria-selected',on);$(x.getAttribute('aria-controls')).hidden=!on});
+  refreshLive(true);refreshDesign();
 }
 
 /* hành động chăm sóc */
@@ -1957,13 +2115,37 @@ function tick(){
 /* ===== các nút khác ===== */
 document.querySelector('.tabs').addEventListener('click',e=>{
   const t=e.target.closest('.tab');if(!t)return;
-  document.querySelectorAll('.tab').forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);$(x.getAttribute('aria-controls')).hidden=!on});
+  selectTab(t.dataset.tab);window.scrollTo({top:0});
 });
-$('p-design').addEventListener('click',e=>{
-  const c=e.target.closest('.chip');if(c){G.S[c.dataset.k]=+c.dataset.i;update();return}
-  const s=e.target.closest('.sw');if(s){G.S.col[+s.dataset.c]=s.dataset.hex;update()}
+// Ngoại hình đang chỉnh: lần đầu sửa thẳng G.S (miễn phí); về sau sửa bản nháp, bấm Lưu mới trừ xu
+const editS=()=>{if(!G.born)return G.S;if(!draft)draft={S:JSON.parse(JSON.stringify(G.S))};return draft.S};
+$('designBody').addEventListener('click',e=>{
+  const c=e.target.closest('.chip');if(c){editS()[c.dataset.k]=+c.dataset.i;update();return}
+  const s=e.target.closest('.sw');if(s){editS().col[+s.dataset.c]=s.dataset.hex;update()}
 });
-$('p-design').addEventListener('input',e=>{if(e.target.type==='color'){G.S.col[+e.target.dataset.c]=e.target.value.slice(1).toUpperCase();update()}});
+$('designBody').addEventListener('input',e=>{if(e.target.type==='color'){editS().col[+e.target.dataset.c]=e.target.value.slice(1).toUpperCase();update()}});
+$('draftCancel').onclick=()=>{draft=null;update()};
+$('draftSave').onclick=()=>{
+  if(!draft)return;
+  if(G.coins<REDESIGN_COST){toast(`Thiếu ${fmt(REDESIGN_COST-G.coins)} xu để đổi ngoại hình. Làm nhiệm vụ hoặc chiến đấu để kiếm thêm.`,'err');update();return}
+  G.coins-=REDESIGN_COST;G.S=draft.S;
+  if(draft.a)SLOTS.forEach(([slot])=>{const v=draft.a[slot],it=v?itemFor(slot,v):null;G.eq[slot]=it&&owns(it.id)?v:0});
+  draft=null;setMsg('');toast(`Đã đổi ngoại hình mới cho ${G.name}! (-${fmt(REDESIGN_COST)} xu)`,'ok');update();
+};
+$('renameBtn').onclick=()=>{
+  const n=$('newName').value.trim();
+  if(!n){toast('Hãy nhập tên mới.','err');$('newName').focus();return}
+  if(n===G.name){toast('Tên mới đang trùng với tên hiện tại.','err');return}
+  if(G.coins<RENAME_COST){toast(`Thiếu ${fmt(RENAME_COST-G.coins)} xu để đổi tên.`,'err');return}
+  G.coins-=RENAME_COST;G.name=n;$('name').value=n;lastActs='';
+  toast(`Đã đổi tên thành ${n}! (-${fmt(RENAME_COST)} xu)`,'ok');update();
+};
+$('finishOnboard').onclick=()=>{
+  const n=$('newName').value.trim();
+  if(!n){toast('Hãy đặt tên cho bé trước đã.','err');$('newName').focus();return}
+  G.name=n;$('name').value=n;G.born=true;draft=null;lastActs='';setMsg('');
+  update();selectTab('home');toast(`Chào mừng ${n} về nhà! Hãy chăm sóc bé thật tốt nhé.`,'ok');
+};
 function itemClick(e){
   const tr=e.target.closest('[data-try]');
   if(tr){const it=byId[tr.dataset.try];pending=null;
@@ -1989,26 +2171,29 @@ $('p-shop').addEventListener('click',itemClick);
 $('p-closet').addEventListener('click',itemClick);
 $('stopTry').onclick=()=>{tryOn=null;update()};
 
-$('battle').onclick=()=>{document.getElementById('t-battle').click();document.getElementById('p-battle').scrollIntoView({behavior:'smooth',block:'start'})};
 $('topup').onclick=()=>{pending=null;G.gems+=100;toast('Nạp thử +100 kim cương. Đây là demo, không có giao dịch thật.','ok');update()};
 
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const N1=['Bông','Kẹo','Mochi','Bí','Nấm','Tí','Đậu','Mây','Sữa','Bơ','Mít','Na'];
 const N2=['Lửa','Gió','Sao','Nhỏ','Xù','Ngố','Mềm','Biển','Sấm','Lá','Băng','Tròn'];
 $('name').value=G.name;
-$('name').addEventListener('input',()=>{G.name=$('name').value||'Bé';lastActs='';save()});
-$('randName').onclick=()=>{G.name=pick(N1)+' '+pick(N2);$('name').value=G.name;lastActs='';save()};
+$('newName').value=G.born?'':G.name;
+// Lúc tạo lần đầu: tên gõ tới đâu hiện lên bảng tên tới đó
+const previewName=()=>{if(!G.born)$('name').value=$('newName').value.trim()||G.name};
+$('newName').addEventListener('input',previewName);
+$('randName').onclick=()=>{$('newName').value=pick(N1)+' '+pick(N2);previewName();$('newName').focus()};
 $('rand').onclick=()=>{
-  PARTS.forEach(P=>{G.S[P.k]=Math.floor(Math.random()*P.opts.length)});
-  G.S.col=COLORS.map(C=>pick(C.list));
-  G.name=pick(N1)+' '+pick(N2);$('name').value=G.name;setMsg('');update();
+  const S=editS();
+  PARTS.forEach(P=>{S[P.k]=Math.floor(Math.random()*P.opts.length)});
+  S.col=COLORS.map(C=>pick(C.list));
+  setMsg('');update();
 };
 let resetArm=false;
 $('reset').onclick=()=>{
   if(!resetArm){resetArm=true;$('reset').textContent='Bấm lần nữa để xóa hết';setTimeout(()=>{resetArm=false;$('reset').textContent='Chơi lại từ đầu'},4000);return}
   resetArm=false;$('reset').textContent='Chơi lại từ đầu';
-  const sp=G.speed;G=fresh();G.speed=sp;QZ=null;BT=null;tryOn=null;pending=null;act=null;$('name').value=G.name;setMsg('');
-  toast('Đã xóa tiến trình, bắt đầu lại từ 8 giờ sáng ngày 1.');update();
+  const sp=G.speed;G=fresh();G.speed=sp;QZ=null;BT=null;tryOn=null;pending=null;act=null;draft=null;$('name').value=G.name;$('newName').value=G.name;setMsg('');
+  toast('Đã xóa tiến trình. Hãy tạo lại bé quái vật của bạn.');update();selectTab('design');
 };
 function setMsg(t,err){const m=$('msg');m.textContent=t;m.classList.toggle('err',!!err)}
 $('copy').onclick=()=>{
@@ -2019,16 +2204,21 @@ $('copy').onclick=()=>{
 $('load').onclick=()=>{
   const r=fromDNA($('paste').value);
   if(!r){setMsg('Mã không hợp lệ. Mã đúng có dạng B0E0M0H1T1W0P3-FFCF6E-FFF4D6-FF7A1A-A000.',true);return}
-  G.S=r.d;tryOn=null;const skipped=[];
-  SLOTS.forEach(([slot])=>{const v=r.a[slot],it=v?itemFor(slot,v):null;
-    if(!v||!it){G.eq[slot]=0;return}
-    if(owns(it.id))G.eq[slot]=v;else{G.eq[slot]=0;skipped.push(it.name)}});
-  setMsg(skipped.length?`Đã nạp quái vật. Bỏ qua phụ kiện bạn chưa sở hữu: ${skipped.join(', ')}.`:'Đã nạp quái vật từ mã gen.');
+  tryOn=null;const skipped=[];
+  SLOTS.forEach(([slot])=>{const v=r.a[slot],it=v?itemFor(slot,v):null;if(v&&it&&!owns(it.id))skipped.push(it.name)});
+  const skipTxt=skipped.length?` Bỏ qua phụ kiện bạn chưa sở hữu: ${skipped.join(', ')}.`:'';
+  if(!G.born){
+    G.S=r.d;SLOTS.forEach(([slot])=>{const v=r.a[slot],it=v?itemFor(slot,v):null;G.eq[slot]=it&&owns(it.id)?v:0});
+    setMsg('Đã dùng ngoại hình từ mã gen.'+skipTxt);
+  }else{
+    draft={S:r.d,a:r.a};
+    setMsg(`Đang xem thử ngoại hình từ mã gen. Bấm Lưu (${fmt(REDESIGN_COST)} xu) để áp dụng.`+skipTxt);
+  }
   update();
 };
 
 $('combo').textContent=fmt(PARTS.reduce((a,P)=>a*P.opts.length,1));
-bindQuest();bindBattle();buildDesign();update();
+bindQuest();bindBattle();buildDesign();update();selectTab(G.born?'home':'design');
 setInterval(tick,1000);
 setInterval(()=>{if(!$('p-shop').hidden&&!pending)renderShop();if(!$('p-quest').hidden&&!QZ)renderQuests()},60000);
 setInterval(save,5000);

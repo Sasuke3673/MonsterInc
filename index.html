@@ -486,7 +486,7 @@ footer{color:var(--muted);font-size:13px;text-align:center;padding:28px 0 40px}
   // Đăng xuất
   $("logout").addEventListener("click", async function () {
     this.disabled = true;
-    await sb.auth.signOut();
+    await sb.auth.signOut({ scope: "local" });
     this.disabled = false;
     signedOut();
   });
