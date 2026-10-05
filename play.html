@@ -14,6 +14,7 @@
 <script src="/supabase-config.js"></script>
 <script src="/auth.js"></script>
 <script src="/cloud-save.js"></script>
+<script src="/music.js" defer></script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Quái Vật">
 <style>
@@ -435,6 +436,13 @@ body{margin:0}
 .acc-menu{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:12px;min-width:220px;display:flex;flex-direction:column;gap:10px;z-index:40}
 .acc-email{font-size:13px;color:var(--muted);word-break:break-all}
 .acc-menu .btn{width:100%}
+.music-btn{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--fg);display:grid;place-items:center;cursor:pointer;padding:0}
+.music-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.music-btn[aria-pressed="true"] .off,.music-btn[aria-pressed="false"] .on{display:none}
+.music-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.music-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.acc-vol{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.acc-vol input{width:100%;accent-color:var(--accent)}
 
 .tabs{position:sticky;top:49px;z-index:25;background:var(--bg);border-bottom:1px solid var(--line);margin:0;padding:0 max(14px,calc((100% - 1160px)/2 + 14px));display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .tab{display:inline-flex;align-items:center;gap:7px;cursor:pointer}
@@ -503,10 +511,17 @@ body.onboarding .draftbar{top:66px}
       <span class="cur" title="Xu: kiếm được khi chơi"><i class="ico coin"></i><span id="coins">0</span></span>
       <span class="cur" title="Kim cương: nạp tiền hoặc thưởng hiếm"><i class="ico gem"></i><span id="gems">0</span><button class="plus" id="topup" type="button" aria-label="Nạp thử 100 kim cương" title="Nạp thử 100 kim cương (demo)">+</button></span>
     </div>
+    <button class="music-btn" id="musicBtn" type="button" aria-pressed="true" aria-label="Tắt nhạc nền" title="Tắt nhạc nền">
+      <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+      <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/><path d="M3 3l18 18"/></svg>
+    </button>
     <details class="account" id="account">
       <summary aria-label="Tài khoản"><span class="avatar" aria-hidden="true">?</span><span class="acc-name" id="accName">Tài khoản</span></summary>
       <div class="acc-menu">
         <div class="acc-email" id="accEmail"></div>
+        <label class="acc-vol" for="musicVol">Âm lượng nhạc nền
+          <input type="range" id="musicVol" min="0" max="100" step="5" value="50">
+        </label>
         <button class="btn" id="logout" type="button">Đăng xuất</button>
       </div>
     </details>
